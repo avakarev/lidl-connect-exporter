@@ -29,6 +29,8 @@ jobs:
         run: |
           echo "::set-output name=sha::$(git rev-parse --short HEAD)"
           echo "::set-output name=ref::${GITHUB_REF##*/}"
+      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-buildx-action@v2
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
@@ -36,6 +38,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v3
         with:
+          platforms: linux/amd64,linux/arm64
           tags: |
             ${{ env.IMGTAG }}:${{ steps.git.outputs.sha }}
             ${{ env.IMGTAG }}:${{ steps.git.outputs.ref }}
