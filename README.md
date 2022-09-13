@@ -13,3 +13,7 @@
 | LIDL_CONNECT_HOST          | API Host                   | no        | api.lidl-connect.de        |
 | HTTP_PORT                  | Server's http port         | no        | 9100                       |
 | METRICS_PATH               | Server's metrics path      | no        | /metrics                   |
+
+## License
+
+`lidl-connect-exporter` is licensed under MIT license. (see [LICENSE](./LICENSE))
