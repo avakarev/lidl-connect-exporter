@@ -37,11 +37,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v3
+        if: ${{ startsWith(github.ref, 'refs/tags/v') != true }}
         with:
           platforms: linux/amd64,linux/arm64
           tags: |
             ${{ env.IMGTAG }}:${{ steps.git.outputs.sha }}
             ${{ env.IMGTAG }}:${{ steps.git.outputs.ref }}
+          build-args: |
+            GITHUB_SHA=${{ steps.git.outputs.sha }}
+            GITHUB_REF=${{ steps.git.outputs.ref }}
+          push: true
+      - uses: docker/build-push-action@v3
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        with:
+          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+          tags: |
+            ${{ env.IMGTAG }}:${{ steps.git.outputs.sha }}
+            ${{ env.IMGTAG }}:${{ steps.git.outputs.ref }}
+            ${{ env.IMGTAG }}:latest
           build-args: |
             GITHUB_SHA=${{ steps.git.outputs.sha }}
             GITHUB_REF=${{ steps.git.outputs.ref }}
