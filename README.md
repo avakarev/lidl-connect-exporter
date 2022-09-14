@@ -30,6 +30,8 @@ services:
 
 ## Configuration
 
+lidl-connect-exporter is configured via environment variables.
+
 | Environment variable       | Description                | Required? | Example                    |
 | -------------------------- | -------------------------- | --------- | -------------------------- |
 | TZ                         | System timezone            | no        | Europe/Berlin              |
@@ -39,6 +41,70 @@ services:
 | LIDL_CONNECT_HOST          | API Host                   | no        | api.lidl-connect.de        |
 | HTTP_PORT                  | Server's http port         | no        | 9100                       |
 | METRICS_PATH               | Server's metrics path      | no        | /metrics                   |
+
+## Prometheus Configuration
+
+Example config:
+
+```
+scrape_configs:
+  - job_name: lidl_connect
+    static_configs:
+      - targets: ['lidl_connect_exporter:9100']
+```
+
+## Metrics
+
+### Balance
+
+| Name                              | Type             | Labels         | Description                 |
+| --------------------------------- | ---------------- | -------------- | --------------------------- |
+| lidl_connect_balance              | gauge            | []             | The state of the balance    |
+
+Example:
+
+```
+# HELP lidl_connect_balance The state of the balance
+# TYPE lidl_connect_balance gauge
+lidl_connect_balance 7.01
+```
+
+### Booked Tariff Fee
+
+| Name                              | Type             | Labels         | Description                 |
+| --------------------------------- | ---------------- | -------------- | --------------------------- |
+| booked_tariff_fee                 | gauge            | [name]         | Booked tariff fee           |
+
+Example:
+
+```
+# HELP lidl_connect_booked_tariff_fee Booked tariff fee
+# TYPE lidl_connect_booked_tariff_fee gauge
+lidl_connect_booked_tariff_fee{name="Data S"} 2.99
+```
+
+### Consumptions
+
+| Name                              | Type             | Labels         | Description                 |
+| --------------------------------- | ---------------- | -------------- | --------------------------- |
+| lidl_connect_consumption_consumed | gauge            | [unit, type]   | Consumption volume consumed |
+| lidl_connect_consumption_left     | gauge            | [unit, type]   | Consumption volume left     |
+| lidl_connect_consumption_max      | gauge            | [unit, type]   | Consumption volume max      |
+
+Example:
+
+```
+# HELP lidl_connect_consumption_consumed Consumption consumed
+# TYPE lidl_connect_consumption_consumed gauge
+lidl_connect_consumption_consumed{type="DATA",unit="GB"} 1.1
+# HELP lidl_connect_consumption_left Consumption left
+# TYPE lidl_connect_consumption_left gauge
+lidl_connect_consumption_left{type="DATA",unit="GB"} 6.63
+# HELP lidl_connect_consumption_max Consumption max
+# TYPE lidl_connect_consumption_max gauge
+lidl_connect_consumption_max{type="DATA",unit="GB"} 7.73
+```
+
 
 ## License
 
