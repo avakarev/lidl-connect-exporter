@@ -37,7 +37,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v3
-        if: ${{ startsWith(github.ref, 'refs/tags/v') != true }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') != true && github.ref != 'refs/heads/main' }}
         with:
           platforms: linux/amd64,linux/arm64
           tags: |
