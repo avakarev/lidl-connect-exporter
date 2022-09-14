@@ -23,7 +23,7 @@ jobs:
     needs: [hadolint, test]
     runs-on: ubuntu-latest
     env:
-      IMGTAG: ghcr.io/avakarev/lidl-connect-exporter
+      REGISTRY: ghcr.io
     steps:
       - uses: actions/checkout@v3
       - id: git
@@ -34,7 +34,7 @@ jobs:
       - uses: docker/setup-buildx-action@v2
       - uses: docker/login-action@v2
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v3
@@ -42,8 +42,8 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ env.IMGTAG }}:${{ steps.git.outputs.sha }}
-            ${{ env.IMGTAG }}:${{ steps.git.outputs.ref }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{steps.git.outputs.sha}}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{steps.git.outputs.ref}}
           build-args: |
             GITHUB_SHA=${{ steps.git.outputs.sha }}
             GITHUB_REF=${{ steps.git.outputs.ref }}
@@ -53,9 +53,9 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           tags: |
-            ${{ env.IMGTAG }}:${{ steps.git.outputs.sha }}
-            ${{ env.IMGTAG }}:${{ steps.git.outputs.ref }}
-            ${{ env.IMGTAG }}:latest
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{steps.git.outputs.sha}}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{steps.git.outputs.ref}}
+            ${{ env.REGISTRY }}/${{ github.repository }}:latest
           build-args: |
             GITHUB_SHA=${{ steps.git.outputs.sha }}
             GITHUB_REF=${{ steps.git.outputs.ref }}
