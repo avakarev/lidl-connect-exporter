@@ -30,6 +30,8 @@ services:
 
 ## Configuration
 
+lidl-connect-exporter is configured via environment variables.
+
 | Environment variable       | Description                | Required? | Example                    |
 | -------------------------- | -------------------------- | --------- | -------------------------- |
 | TZ                         | System timezone            | no        | Europe/Berlin              |
@@ -39,6 +41,17 @@ services:
 | LIDL_CONNECT_HOST          | API Host                   | no        | api.lidl-connect.de        |
 | HTTP_PORT                  | Server's http port         | no        | 9100                       |
 | METRICS_PATH               | Server's metrics path      | no        | /metrics                   |
+
+## Prometheus Configuration
+
+Example config:
+
+```
+scrape_configs:
+  - job_name: lidl_connect
+    static_configs:
+      - targets: ['lidl_connect_exporter:9100']
+```
 
 ## License
 
