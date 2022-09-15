@@ -2,8 +2,10 @@ package lidlconnect_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/avakarev/go-testutil"
+	"github.com/avakarev/go-timeutil"
 	"github.com/jarcoal/httpmock"
 
 	"github.com/avakarev/lidl-connect-exporter/internal/lidlconnect"
@@ -59,4 +61,25 @@ func TestGetConsumptions(t *testing.T) {
 			}},
 		}},
 	}}, consumptions, t)
+}
+
+func TestConsumptionsForUnitExpiresInSecondsFrom(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder("POST", "https://api.test.host/api/graphql",
+		httpmock.NewStringResponder(200, string(testutil.FixtureBytes(t, "./test/fixtures/consumptions.json"))))
+
+	consumptions, err := lidlconnect.TestClient().GetConsumptions()
+	if err != nil {
+		t.Errorf("Failed to get consumptions: %s", err.Error())
+	}
+
+	testutil.Diff(1, len(consumptions), t)
+
+	correctTime, _ := time.ParseInLocation(time.RFC3339, "2022-09-15T01:22:21+02:00", timeutil.Location)
+	testutil.Diff(1250931.0, consumptions[0].ExpiresIn(correctTime).Seconds(), t)
+
+	wrongTime, _ := time.ParseInLocation(time.RFC3339, "2022-09-29T12:51:13+02:00", timeutil.Location)
+	testutil.Diff(0.0, consumptions[0].ExpiresIn(wrongTime).Seconds(), t)
 }

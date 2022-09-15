@@ -85,11 +85,12 @@ lidl_connect_booked_tariff_fee{name="Data S"} 2.99
 
 ### Consumptions
 
-| Name                              | Type             | Labels         | Description                 |
-| --------------------------------- | ---------------- | -------------- | --------------------------- |
-| lidl_connect_consumption_consumed | gauge            | [unit, type]   | Consumption volume consumed |
-| lidl_connect_consumption_left     | gauge            | [unit, type]   | Consumption volume left     |
-| lidl_connect_consumption_max      | gauge            | [unit, type]   | Consumption volume max      |
+| Name                                    | Type             | Labels         | Description                            |
+| --------------------------------------- | ---------------- | -------------- | -------------------------------------- |
+| lidl_connect_consumption_consumed       | gauge            | [unit, type]   | Consumption volume consumed            |
+| lidl_connect_consumption_left           | gauge            | [unit, type]   | Consumption volume left                |
+| lidl_connect_consumption_max            | gauge            | [unit, type]   | Consumption volume max                 |
+| lidl_connect_consumption_expires_in_sec | gauge            | [unit, type]   | Consumption expiration time in seconds |
 
 Example:
 
@@ -97,6 +98,9 @@ Example:
 # HELP lidl_connect_consumption_consumed Consumption consumed
 # TYPE lidl_connect_consumption_consumed gauge
 lidl_connect_consumption_consumed{type="DATA",unit="GB"} 1.1
+# HELP lidl_connect_consumption_expires_in_sec Consumption expires in seconds
+# TYPE lidl_connect_consumption_expires_in_sec gauge
+lidl_connect_consumption_expires_in_sec{type="DATA",unit="GB"} 1.247851107573e+06
 # HELP lidl_connect_consumption_left Consumption left
 # TYPE lidl_connect_consumption_left gauge
 lidl_connect_consumption_left{type="DATA",unit="GB"} 6.63

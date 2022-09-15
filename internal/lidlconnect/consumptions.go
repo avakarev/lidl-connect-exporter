@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"time"
+
+	"github.com/avakarev/go-timeutil"
 )
 
 // TariffOrOption represents tariff option attributes
@@ -25,6 +28,15 @@ type ConsumptionsForUnit struct {
 	Left            float64          `json:"left"`
 	Max             float64          `json:"max"`
 	TariffOrOptions []TariffOrOption `json:"tariffOrOptions"`
+}
+
+// ExpiresIn return consumption expiration duration
+func (c ConsumptionsForUnit) ExpiresIn(t time.Time) time.Duration {
+	expiresAt, err := time.ParseInLocation(time.RFC3339, c.ExpirationDate, timeutil.Location)
+	if err != nil || expiresAt.Before(t) {
+		return time.Duration(0)
+	}
+	return expiresAt.Sub(t)
 }
 
 // Consumptions represents current consumptions

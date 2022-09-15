@@ -1,6 +1,8 @@
 package metrics
 
 import (
+	"time"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog/log"
 
@@ -40,6 +42,12 @@ var consumptionMax = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 	Help:      "Consumption max",
 }, []string{"unit", "type"})
 
+var consumptionExpiresInSec = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	Namespace: Namespace,
+	Name:      "consumption_expires_in_sec",
+	Help:      "Consumption expires in seconds",
+}, []string{"unit", "type"})
+
 // MeterBalance records balance metrics
 func MeterBalance(b *lidlconnect.BalanceInfo) {
 	value := float64(b.CurrentCustomer.Balance) / 100
@@ -61,10 +69,12 @@ func MeterConsumption(consumptions []lidlconnect.ConsumptionsForUnit) {
 		consumptionConsumed.With(labels).Set(c.Consumed)
 		consumptionLeft.With(labels).Set(c.Left)
 		consumptionMax.With(labels).Set(c.Max)
+		consumptionExpiresInSec.With(labels).Set(c.ExpiresIn(time.Now()).Seconds())
 		log.Debug().
 			Float64("consumed", c.Consumed).
 			Float64("left", c.Left).
 			Float64("max", c.Max).
+			Float64("expires", c.ExpiresIn(time.Now()).Seconds()).
 			Str("unit", c.FormattedUnit).
 			Str("type", c.Type).
 			Msg("consumptions metering")
@@ -77,4 +87,5 @@ func init() {
 	prometheus.MustRegister(consumptionConsumed)
 	prometheus.MustRegister(consumptionLeft)
 	prometheus.MustRegister(consumptionMax)
+	prometheus.MustRegister(consumptionExpiresInSec)
 }
