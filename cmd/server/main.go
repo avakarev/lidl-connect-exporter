@@ -51,10 +51,10 @@ func main() {
 	if _, err := scheduler.Every(5).Minutes().Do(meterConsumptions); err != nil {
 		log.Error().Err(err).Send()
 	}
-	if _, err := scheduler.Every(12).Hours().Do(meterBalance); err != nil {
+	if _, err := scheduler.Every(30).Minutes().Do(meterBalance); err != nil {
 		log.Error().Err(err).Send()
 	}
-	if _, err := scheduler.Every(24).Hours().Do(meterTariff); err != nil {
+	if _, err := scheduler.Every(1).Hour().Do(meterTariff); err != nil {
 		log.Error().Err(err).Send()
 	}
 	scheduler.StartAsync()
