@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Implement lidl_connect_consumption_expires_in_sec metric
+### Changed
+- Reduce scraping intervals:
+    * balance: 12 hours -> 30 minutes
+    * tariff: 24 hours -> 1 hour
 
 ## [1.0.0] - 2022-09-14
 ### Added
