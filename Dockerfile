@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine AS builder
+FROM golang:1.19-alpine AS builder
 ARG GITHUB_SHA
 ARG GITHUB_REF
 RUN apk add --no-cache ca-certificates tzdata make

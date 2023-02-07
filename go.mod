@@ -1,6 +1,6 @@
 module github.com/avakarev/lidl-connect-exporter
 
-go 1.18
+go 1.19
 
 require (
 	github.com/avakarev/go-buildmeta v1.0.0
