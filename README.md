@@ -9,7 +9,7 @@ There are pre-built docker images, so you can run it
 either with docker:
 
 ```
-docker run --env LIDL_CONNECT_USERNAME=015123456789 --env LIDL_CONNECT_PASSWORD=password ghcr.io/avakarev/lidl-connect-exporter:v1.1.0
+docker run --env LIDL_CONNECT_USERNAME=015123456789 --env LIDL_CONNECT_PASSWORD=password ghcr.io/avakarev/lidl-connect-exporter:v1.1.1
 ```
 
 or with docker-compose:
@@ -19,7 +19,7 @@ version: "3.7"
 
 services:
   lidl_connect_exporter:
-    image: ghcr.io/avakarev/lidl-connect-exporter:v1.1.0
+    image: ghcr.io/avakarev/lidl-connect-exporter:v1.1.1
     container_name: lidl-connect-exporter
     expose:
       - 9100
