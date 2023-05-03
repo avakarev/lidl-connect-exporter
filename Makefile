@@ -3,7 +3,7 @@ GO_META_MOD := github.com/avakarev/go-buildmeta
 LDFLAGS += -s -w
 LDFLAGS += -X ${GO_META_MOD}.Commit=${GITHUB_SHA}
 LDFLAGS += -X ${GO_META_MOD}.Ref=${GITHUB_REF}
-LDFLAGS += -X ${GO_META_MOD}.Date=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+LDFLAGS += -X ${GO_META_MOD}.BuildTimeUTC=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 lint:
 	@echo ">> Running revive..."
