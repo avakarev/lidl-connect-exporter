@@ -43,7 +43,7 @@ func meterTariff() {
 
 func main() {
 	logutil.MustInit()
-	log.Info().Fields(buildmeta.Fields()).Msg("build meta")
+	log.Info().Str("ref", buildmeta.Ref).Str("commit", buildmeta.Commit).Msg("build meta")
 
 	client = lidlconnect.DefaultClient()
 
