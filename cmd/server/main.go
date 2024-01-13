@@ -2,9 +2,9 @@
 package main
 
 import (
-	"github.com/avakarev/go-buildmeta"
-	"github.com/avakarev/go-logutil"
-	"github.com/avakarev/go-timeutil"
+	"github.com/avakarev/go-util/buildmeta"
+	"github.com/avakarev/go-util/timeutil"
+	"github.com/avakarev/go-util/zerologutil"
 	"github.com/go-co-op/gocron"
 	"github.com/rs/zerolog/log"
 
@@ -42,7 +42,7 @@ func meterTariff() {
 }
 
 func main() {
-	logutil.MustInit()
+	zerologutil.MustInit()
 	log.Info().Str("ref", buildmeta.Ref).Str("commit", buildmeta.Commit).Msg("build meta")
 
 	client = lidlconnect.DefaultClient()

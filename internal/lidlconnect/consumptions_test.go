@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/avakarev/go-testutil"
-	"github.com/avakarev/go-timeutil"
+	"github.com/avakarev/go-util/testutil"
+	"github.com/avakarev/go-util/timeutil"
 	"github.com/jarcoal/httpmock"
 
 	"github.com/avakarev/lidl-connect-exporter/internal/lidlconnect"

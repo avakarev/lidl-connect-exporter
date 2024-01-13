@@ -3,7 +3,7 @@ package lidlconnect_test
 import (
 	"testing"
 
-	"github.com/avakarev/go-testutil"
+	"github.com/avakarev/go-util/testutil"
 	"github.com/jarcoal/httpmock"
 
 	"github.com/avakarev/lidl-connect-exporter/internal/lidlconnect"

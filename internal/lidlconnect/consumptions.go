@@ -6,7 +6,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/avakarev/go-timeutil"
+	"github.com/avakarev/go-util/timeutil"
 )
 
 // TariffOrOption represents tariff option attributes
