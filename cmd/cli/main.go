@@ -2,15 +2,15 @@
 package main
 
 import (
-	"github.com/avakarev/go-buildmeta"
-	"github.com/avakarev/go-logutil"
+	"github.com/avakarev/go-util/buildmeta"
+	"github.com/avakarev/go-util/zerologutil"
 	"github.com/rs/zerolog/log"
 
 	"github.com/avakarev/lidl-connect-exporter/internal/lidlconnect"
 )
 
 func main() {
-	logutil.MustInit()
+	zerologutil.MustInit()
 	log.Info().Fields(buildmeta.Fields()).Msg("build meta")
 
 	client := lidlconnect.DefaultClient()
