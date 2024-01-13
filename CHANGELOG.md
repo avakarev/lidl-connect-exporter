@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.3] - 2024-01-13
+### Changed
+- Bump go 1.20 => 1.21
+- Migrate to go-util
+- Migrate gocron v1 => v2
+- Bump go deps
+
 ## [1.1.2] - 2023-05-04
 ### Changed
 - Bump go 1.19 => 1.20
@@ -28,7 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial implementation
 
-[Unreleased]: https://github.com/avakarev/lidl-connect-exporter/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/avakarev/lidl-connect-exporter/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/avakarev/lidl-connect-exporter/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/avakarev/lidl-connect-exporter/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/avakarev/lidl-connect-exporter/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/avakarev/lidl-connect-exporter/compare/1.0.0...1.1.0
