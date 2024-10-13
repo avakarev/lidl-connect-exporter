@@ -15,11 +15,9 @@ docker run --env LIDL_CONNECT_USERNAME=015123456789 --env LIDL_CONNECT_PASSWORD=
 or with docker-compose:
 
 ```
-version: "3.7"
-
 services:
   lidl_connect_exporter:
-    image: ghcr.io/avakarev/lidl-connect-exporter:v1.1.3
+    image: ghcr.io/avakarev/lidl-connect-exporter:latest
     container_name: lidl-connect-exporter
     expose:
       - 9100
