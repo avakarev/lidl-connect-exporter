@@ -1,12 +1,9 @@
 package lidlconnect
 
 import (
-	"encoding/json"
-	"fmt"
-	"io"
 	"time"
 
-	"github.com/rs/zerolog/log"
+	"github.com/avakarev/go-util/httputil"
 )
 
 // TokenClaim represents client credentials
@@ -18,24 +15,13 @@ type TokenClaim struct {
 	Username     string `json:"username"`
 }
 
-// NewTokenClaim returns client credentials for login
-func NewTokenClaim(username string, password string) *TokenClaim {
-	return &TokenClaim{
-		ClientID:     "lidl",
-		ClientSecret: "lidl",
-		GrantType:    "password",
-		Username:     username,
-		Password:     password,
-	}
-}
-
-// Token represents api auth token
+// Token represents api auth token response
 type Token struct {
-	Type         string `json:"token_type"`
-	ExpiresIn    int    `json:"expires_in"`
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	RequestedAt  time.Time
+	Type         string    `json:"token_type"`
+	ExpiresIn    int       `json:"expires_in"`
+	AccessToken  string    `json:"access_token"`
+	RefreshToken string    `json:"refresh_token"`
+	RequestedAt  time.Time `json:"-"`
 }
 
 // Expired checks whether token is expired
@@ -45,23 +31,26 @@ func (t *Token) Expired() bool {
 
 // GetToken return access token for the given credentials
 func (c *Client) GetToken() (*Token, error) {
-	if c.Username == "" || c.Password == "" {
-		log.Fatal().Msg("LIDL_CONNECT_USERNAME and/or LIDL_CONNECT_PASSWORD is empty")
+	if err := c.Account.Validate(); err != nil {
+		return nil, err
 	}
-	claim := NewTokenClaim(c.Username, c.Password)
-	res, err := c.post("token", claim, nil)
+	claim := &TokenClaim{
+		ClientID:     "lidl",
+		ClientSecret: "lidl",
+		GrantType:    "password",
+		Username:     c.Account.Username,
+		Password:     c.Account.Password,
+	}
+
+	var resp Token
+	status, err := c.base.PostJSON("/api/token", claim, &resp)
 	if err != nil {
 		return nil, err
 	}
-	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("got unexpected status code %d", res.StatusCode)
-	}
-
-	bodyBytes, err := io.ReadAll(res.Body)
-	if err != nil {
+	if err := httputil.ExpectStatus(200, status); err != nil {
 		return nil, err
 	}
 
-	token := Token{RequestedAt: time.Now()}
-	return &token, json.Unmarshal(bodyBytes, &token)
+	resp.RequestedAt = time.Now()
+	return &resp, nil
 }

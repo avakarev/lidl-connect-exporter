@@ -18,7 +18,8 @@ func TestGetConsumptions(t *testing.T) {
 	httpmock.RegisterResponder("POST", "https://api.test.host/api/graphql",
 		httpmock.NewStringResponder(200, string(testutil.FixtureBytes(t, "./test/fixtures/consumptions.json"))))
 
-	consumptions, err := lidlconnect.TestClient().GetConsumptions()
+	acc := &lidlconnect.Account{Username: "usr", Password: "pwd", Name: "test"}
+	consumptions, err := lidlconnect.NewClient(acc, "api.test.host").GetConsumptions()
 	if err != nil {
 		t.Errorf("Failed to get consumptions: %s", err.Error())
 	}
@@ -70,7 +71,8 @@ func TestConsumptionsForUnitExpiresInSecondsFrom(t *testing.T) {
 	httpmock.RegisterResponder("POST", "https://api.test.host/api/graphql",
 		httpmock.NewStringResponder(200, string(testutil.FixtureBytes(t, "./test/fixtures/consumptions.json"))))
 
-	consumptions, err := lidlconnect.TestClient().GetConsumptions()
+	acc := &lidlconnect.Account{Username: "usr", Password: "pwd", Name: "test"}
+	consumptions, err := lidlconnect.NewClient(acc, "api.test.host").GetConsumptions()
 	if err != nil {
 		t.Errorf("Failed to get consumptions: %s", err.Error())
 	}

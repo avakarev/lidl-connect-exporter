@@ -1,6 +1,6 @@
 # lidl-connect-exporter
 
-> Exporter for billing and usage metrics of LIDL Connect SIM card
+> Exporter for billing and usage metrics of LIDL Connect SIM cards
 
 ## Getting started
 
@@ -9,7 +9,7 @@ There are pre-built docker images, so you can run it
 either with docker:
 
 ```
-docker run --env LIDL_CONNECT_USERNAME=015123456789 --env LIDL_CONNECT_PASSWORD=password ghcr.io/avakarev/lidl-connect-exporter:v1.1.3
+docker run --env LIDL_CONNECT_USERNAME=015123456789 --env LIDL_CONNECT_PASSWORD=password ghcr.io/avakarev/lidl-connect-exporter:latest
 ```
 
 or with docker-compose:

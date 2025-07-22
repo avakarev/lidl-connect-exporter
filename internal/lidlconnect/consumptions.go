@@ -1,9 +1,6 @@
 package lidlconnect
 
 import (
-	"encoding/json"
-	"fmt"
-	"io"
 	"time"
 
 	"github.com/avakarev/go-util/timeutil"
@@ -56,7 +53,7 @@ type ConsumptionsResponse struct {
 
 // GetConsumptions returns current consumptions
 func (c *Client) GetConsumptions() ([]ConsumptionsForUnit, error) {
-	q := map[string]interface{}{
+	q := map[string]any{
 		"operationName": "consumptions",
 		"query": `query
 			consumptions {
@@ -90,19 +87,6 @@ func (c *Client) GetConsumptions() ([]ConsumptionsForUnit, error) {
 			}`,
 		"variables": "{}",
 	}
-	res, err := c.graphql(q)
-	if err != nil {
-		return nil, err
-	}
-	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("got unexpected status code %d", res.StatusCode)
-	}
-
-	bodyBytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var response ConsumptionsResponse
-	return response.Data.Consumptions.ConsumptionsForUnit, json.Unmarshal(bodyBytes, &response)
+	var resp ConsumptionsResponse
+	return resp.Data.Consumptions.ConsumptionsForUnit, c.graphql(q, &resp)
 }

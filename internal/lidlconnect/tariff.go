@@ -1,11 +1,5 @@
 package lidlconnect
 
-import (
-	"encoding/json"
-	"fmt"
-	"io"
-)
-
 // BookedTariff represents tariff attributes
 type BookedTariff struct {
 	TariffID   string `json:"tariffId"`
@@ -31,7 +25,7 @@ type TariffsResponse struct {
 
 // GetBookedTariff returns booked tariff
 func (c *Client) GetBookedTariff() (*BookedTariff, error) {
-	q := map[string]interface{}{
+	q := map[string]any{
 		"operationName": nil,
 		"query": `query
 			bookedTariff {
@@ -46,19 +40,6 @@ func (c *Client) GetBookedTariff() (*BookedTariff, error) {
 			}`,
 		"variables": "{}",
 	}
-	res, err := c.graphql(q)
-	if err != nil {
-		return nil, err
-	}
-	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("got unexpected status code %d", res.StatusCode)
-	}
-
-	bodyBytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var response TariffsResponse
-	return &response.Data.Tariffs.BookedTariff, json.Unmarshal(bodyBytes, &response)
+	var resp TariffsResponse
+	return &resp.Data.Tariffs.BookedTariff, c.graphql(q, &resp)
 }
