@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/avakarev/go-util/buildmeta"
+	"github.com/avakarev/go-util/envutil"
 	"github.com/avakarev/go-util/timeutil"
 	"github.com/avakarev/go-util/zerologutil"
 	"github.com/go-co-op/gocron/v2"
@@ -14,9 +15,7 @@ import (
 	"github.com/avakarev/lidl-connect-exporter/internal/metrics"
 )
 
-var client *lidlconnect.Client
-
-func meterConsumptions() {
+func meterConsumptions(client *lidlconnect.Client) {
 	consumptions, err := client.GetConsumptions()
 	if err != nil {
 		log.Error().Err(err).Send()
@@ -25,7 +24,7 @@ func meterConsumptions() {
 	metrics.MeterConsumption(consumptions)
 }
 
-func meterBalance() {
+func meterBalance(client *lidlconnect.Client) {
 	balance, err := client.GetBalanceInfo()
 	if err != nil {
 		log.Error().Err(err).Send()
@@ -34,7 +33,7 @@ func meterBalance() {
 	metrics.MeterBalance(balance)
 }
 
-func meterTariff() {
+func meterTariff(client *lidlconnect.Client) {
 	tariff, err := client.GetBookedTariff()
 	if err != nil {
 		log.Error().Err(err).Send()
@@ -47,19 +46,23 @@ func main() {
 	zerologutil.MustInit()
 	log.Info().Str("ref", buildmeta.Ref).Str("commit", buildmeta.Commit).Msg("build meta")
 
-	client = lidlconnect.DefaultClient()
+	client := lidlconnect.NewClient(&lidlconnect.Account{
+		Username: envutil.MustStr("LIDL_CONNECT_USERNAME"),
+		Password: envutil.MustStr("LIDL_CONNECT_PASSWORD"),
+		Name:     "default",
+	})
 
 	scheduler, err := gocron.NewScheduler(gocron.WithLocation(timeutil.Location))
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
-	if _, err := scheduler.NewJob(gocron.DurationJob(5*time.Minute), gocron.NewTask(meterConsumptions)); err != nil {
+	if _, err := scheduler.NewJob(gocron.DurationJob(5*time.Minute), gocron.NewTask(meterConsumptions, client)); err != nil {
 		log.Fatal().Err(err).Send()
 	}
-	if _, err := scheduler.NewJob(gocron.DurationJob(30*time.Minute), gocron.NewTask(meterBalance)); err != nil {
+	if _, err := scheduler.NewJob(gocron.DurationJob(30*time.Minute), gocron.NewTask(meterBalance, client)); err != nil {
 		log.Fatal().Err(err).Send()
 	}
-	if _, err := scheduler.NewJob(gocron.DurationJob(1*time.Hour), gocron.NewTask(meterTariff)); err != nil {
+	if _, err := scheduler.NewJob(gocron.DurationJob(1*time.Hour), gocron.NewTask(meterTariff, client)); err != nil {
 		log.Fatal().Err(err).Send()
 	}
 	scheduler.Start()

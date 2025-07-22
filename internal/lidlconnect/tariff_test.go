@@ -16,7 +16,8 @@ func TestGetBookedTariff(t *testing.T) {
 	httpmock.RegisterResponder("POST", "https://api.test.host/api/graphql",
 		httpmock.NewStringResponder(200, string(testutil.FixtureBytes(t, "./test/fixtures/booked_tariff.json"))))
 
-	tariff, err := lidlconnect.TestClient().GetBookedTariff()
+	acc := &lidlconnect.Account{Username: "usr", Password: "pwd", Name: "test"}
+	tariff, err := lidlconnect.NewClient(acc, "api.test.host").GetBookedTariff()
 	if err != nil {
 		t.Errorf("Failed to get tariff: %s", err.Error())
 	}

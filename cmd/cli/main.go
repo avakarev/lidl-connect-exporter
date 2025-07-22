@@ -3,6 +3,7 @@ package main
 
 import (
 	"github.com/avakarev/go-util/buildmeta"
+	"github.com/avakarev/go-util/envutil"
 	"github.com/avakarev/go-util/zerologutil"
 	"github.com/rs/zerolog/log"
 
@@ -13,7 +14,11 @@ func main() {
 	zerologutil.MustInit()
 	log.Info().Fields(buildmeta.Fields()).Msg("build meta")
 
-	client := lidlconnect.DefaultClient()
+	client := lidlconnect.NewClient(&lidlconnect.Account{
+		Username: envutil.MustStr("LIDL_CONNECT_USERNAME"),
+		Password: envutil.MustStr("LIDL_CONNECT_PASSWORD"),
+		Name:     "default",
+	})
 
 	balance, err := client.GetBalanceInfo()
 	if err != nil {

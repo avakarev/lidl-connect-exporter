@@ -1,12 +1,6 @@
 // Package lidlconnect implements lidl-connect apis
 package lidlconnect
 
-import (
-	"encoding/json"
-	"fmt"
-	"io"
-)
-
 // Customer represents customer attributes
 type Customer struct {
 	Balance int64 `json:"balance"`
@@ -24,7 +18,7 @@ type BalanceInfoResponse struct {
 
 // GetBalanceInfo returns current state of the customer's balance
 func (c *Client) GetBalanceInfo() (*BalanceInfo, error) {
-	q := map[string]string{
+	q := map[string]any{
 		"operationName": "balanceInfo",
 		"query": `query
 			balanceInfo {
@@ -34,19 +28,6 @@ func (c *Client) GetBalanceInfo() (*BalanceInfo, error) {
 			}`,
 		"variables": "{}",
 	}
-	res, err := c.graphql(q)
-	if err != nil {
-		return nil, err
-	}
-	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("got unexpected status code %d", res.StatusCode)
-	}
-
-	bodyBytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var response BalanceInfoResponse
-	return &response.Data, json.Unmarshal(bodyBytes, &response)
+	var resp BalanceInfoResponse
+	return &resp.Data, c.graphql(q, &resp)
 }
