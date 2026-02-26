@@ -15,7 +15,7 @@ const DefaultAPIHost = "api.lidl-connect.de"
 type Client struct {
 	base        httputil.Client
 	Account     *Account
-	AccessToken string
+	AccessToken string // #nosec G117
 }
 
 func (c *Client) login() error {

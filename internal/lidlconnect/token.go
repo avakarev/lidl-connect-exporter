@@ -9,9 +9,9 @@ import (
 // TokenClaim represents client credentials
 type TokenClaim struct {
 	ClientID     string `json:"client_id"`
-	ClientSecret string `json:"client_secret"`
+	ClientSecret string `json:"client_secret"` // #nosec G117
 	GrantType    string `json:"grant_type"`
-	Password     string `json:"password"`
+	Password     string `json:"password"` // #nosec G117
 	Username     string `json:"username"`
 }
 
@@ -19,8 +19,8 @@ type TokenClaim struct {
 type Token struct {
 	Type         string    `json:"token_type"`
 	ExpiresIn    int       `json:"expires_in"`
-	AccessToken  string    `json:"access_token"`
-	RefreshToken string    `json:"refresh_token"`
+	AccessToken  string    `json:"access_token"`  // #nosec G117
+	RefreshToken string    `json:"refresh_token"` // #nosec G117
 	RequestedAt  time.Time `json:"-"`
 }
 
