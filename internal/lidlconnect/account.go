@@ -9,7 +9,7 @@ import (
 type Account struct {
 	Name     string
 	Username string
-	Password string
+	Password string // #nosec G117
 }
 
 // Validate checks account validity
