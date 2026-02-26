@@ -1,8 +1,6 @@
 module github.com/avakarev/lidl-connect-exporter
 
-go 1.24
-
-toolchain go1.24.5
+go 1.26
 
 require (
 	github.com/avakarev/go-util v1.8.3
