@@ -6,25 +6,36 @@ on:
       - main
     paths-ignore:
       - '*.md'
-      - 'doc/**'
+      - 'docs/**'
   pull_request:
     paths-ignore:
       - '*.md'
-      - 'doc/**'
+      - 'docs/**'
+  # release.yml runs these checks before publishing an image.
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  # Prefixed, so a calling workflow's own group never matches it.
+  group: ci-${{ github.ref }}
+  # A new push to a pull request supersedes its running checks.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   hadolint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: hadolint/hadolint-action@v3.3.0
+      - uses: actions/checkout@v7
+      - uses: hadolint/hadolint-action@v3.5.0
         with:
           ignore: DL3018
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
       - name: Lint & Test
